@@ -1,0 +1,24 @@
+version: '2'
+services:
+  django_data:
+    image: mysql:5.7
+    environment: 
+      MYSQL_ROOT_PASSWORD: supersecret
+      MYSQL_DATABASE: djangogirls_blog
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: secret
+    volumes:
+      - ./data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  django:
+    build: .
+    volumes:
+      - .:/usr/app
+    ports:
+      - "80:80"
+    command: ["python", "djangogirls/manage.py", "runserver", "0.0.0.0:80"]
+    # command: 'tail -f /dev/null'
+    links:
+      - django_data
